@@ -57,12 +57,24 @@ pipeline {
         }
         
         }
-        post { 
-        always { 
-            echo 'All the jobs is done'
+        post {
+        always {
+            echo 'Always'
+        }
+        success {
+            echo 'Only on SUCCESS'
+        }
+        failure {
+            echo 'Only on Failure'
+        }
+        unstable {
+            echo 'Only if run is unstable'
+        }
+        changed {
+            echo 'Only if status changed from Success to Failure or vice versa w.r.t. last run.'
+        }
     }
-    
-    } 
+}
 }
 
 
