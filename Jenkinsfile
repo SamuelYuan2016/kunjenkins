@@ -10,8 +10,7 @@ pipeline {
     stages {
         stage('First') {
             environment{
-                wifipassword=credentials('wifisecret')
-                
+                wifipassword=credentials('wifisecret')   
             }  
             steps {
                 script {
@@ -27,8 +26,6 @@ pipeline {
         }
        }
         
-
-    
         stage('SecondStage') {
             environment{
                 wifipassword=credentials('wifisecret')
@@ -49,11 +46,10 @@ pipeline {
                         state('shut2'){
                             steps {sh 'ssh rhl02  "echo $wifipassword | sudo -S shutdown -t 300 "'}
 
-                        }
-            
+                        }    
             }
             }
-            }
+        }
         stage('s3') {
             steps {
             
@@ -80,4 +76,5 @@ pipeline {
             echo 'Only if status changed from Success to Failure or vice versa w.r.t. last run.'
         }
     }
+}
 }
