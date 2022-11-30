@@ -15,7 +15,6 @@ pipeline {
             }  
             steps {
                 script {
-            //if (1==1) {
             if (LocalDateTime.now().hour > 20) {
             sh "sleep 1s"
             sh "ls -la"
@@ -26,8 +25,8 @@ pipeline {
                 echo 'Production Server can only shutdown at night after 20:00'
             }                        
         }
-            }
-        }
+       }
+        
 
     
         stage('SecondStage') {
