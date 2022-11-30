@@ -37,14 +37,20 @@ pipeline {
                
             }
             options{
-                timeout(time: 1, unit:"MINUTES")
+                timeout(time: 2, unit:"MINUTES")
             }
             
             steps{
-                
-            sh 'ssh ubt26   "echo $simplepw | sudo -S shutdown -t 300 "'
-            sh 'ssh rhl02  "echo $wifipassword | sudo -S shutdown -t 300 "'
-            
+
+                  parallel{
+                        stage('shut1') {
+                            steps { sh 'ssh ubt26   "echo $simplepw | sudo -S shutdown -t 300 "'
+                            }
+                        }
+                        state('shut2'){
+                            steps {sh 'ssh rhl02  "echo $wifipassword | sudo -S shutdown -t 300 "'}
+
+                        }
             
             }
         }
@@ -75,6 +81,3 @@ pipeline {
         }
     }
 }
-
-
-
