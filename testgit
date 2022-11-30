@@ -1,0 +1,65 @@
+import java.time.LocalDateTime
+
+pipeline {
+    agent any
+    options { timestamps()
+                retry(3)
+        
+    }
+    
+    stages {
+        stage('First') {
+            environment{
+                wifipassword=credentials('wifisecret')
+                
+            }  
+            steps {
+                script {
+            //if (1==1) {
+            if (LocalDateTime.now().hour > 20) {
+            sh "sleep 1s"
+            sh "ls -la"
+           
+            
+            }
+            else {
+                echo 'Production Server can only shutdown at night after 20:00'
+            }                        
+        }
+            }
+        }
+
+    
+        stage('SecondStage') {
+            environment{
+                wifipassword=credentials('wifisecret')
+                simplepw=credentials('simplesecret')
+               
+            }
+            options{timeout(time: 1, unit:"MINUTES")}
+            
+            steps{
+                
+            sh 'pwd'
+            
+            
+            
+            }
+        }
+        stage('s3') {
+            steps {
+            
+            sh 'pwd'
+            
+            }
+        }
+        
+        }
+        post { 
+        always { 
+            echo 'All the jobs is done'
+    }
+    
+    } 
+}
+
