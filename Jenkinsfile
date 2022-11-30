@@ -3,7 +3,7 @@ import java.time.LocalDateTime
 pipeline {
     agent any
     options { timestamps()
-                retry(3)
+                retry(2)
         
     }
     
@@ -11,6 +11,7 @@ pipeline {
         stage('First') {
             environment{
                 wifipassword=credentials('wifisecret')
+                
             }  
             steps {
                 script {
@@ -18,11 +19,11 @@ pipeline {
             if (LocalDateTime.now().hour > 20) {
             sh "sleep 1s"
             sh "ls -la"
-            sh 'ssh kqd@yx.jzymcs.cn   "echo $wifipassword  | sudo -S shutdown -t 300 "'
+            sh 'ssh ubt28   "echo $wifipassword  | sudo -S shutdown -t 300 "'
             
             }
             else {
-                echo 'I execute elsewhere'
+                echo 'Production Server can only shutdown at night after 20:00'
             }                        
         }
             }
@@ -32,6 +33,7 @@ pipeline {
         stage('SecondStage') {
             environment{
                 wifipassword=credentials('wifisecret')
+                simplepw=credentials('simplesecret')
                
             }
             options{
@@ -40,9 +42,9 @@ pipeline {
             
             steps{
                 
+            sh 'ssh ubt26   "echo $simplepw | sudo -S shutdown -t 300 "'
+            sh 'ssh rhl02  "echo $wifipassword | sudo -S shutdown -t 300 "'
             
-            sh 'ssh kqd@kuncts02.jzymcs.cn -p 7022  "echo $wifipassword | sudo -S shutdown -t 300 "'
-            sh 'ssh kqd@kuncts02.jzymcs.cn -p 7026   "echo $simplepw | sudo -S shutdown -t 300 "'
             
             }
         }
@@ -57,7 +59,7 @@ pipeline {
         }
         post { 
         always { 
-            echo 'I will always say Hello again!'
+            echo 'All the jobs is done'
     }
     
     } 
