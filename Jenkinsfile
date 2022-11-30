@@ -1,10 +1,7 @@
-import java.time.LocalDateTime
-
 pipeline {
     agent any
     options { timestamps()
-                retry(2)
-        
+                retry(2)    
     }
     
     stages {
@@ -25,7 +22,7 @@ pipeline {
             }                        
         }
        }
-        }        
+    }
         stage('SecondStage') {
             environment{
                 wifipassword=credentials('wifisecret')
@@ -38,17 +35,19 @@ pipeline {
             
             steps{
 
-                  parallel{
-                        stage('shut1') {
-                            steps { sh 'ssh ubt26   "echo $simplepw | sudo -S shutdown -t 300 "'
+                  {sh 'ssh rhl02  "echo $wifipassword | sudo -S shutdown -t 300 "'
                             }
-                        }
-                        state('shut2'){
-                            steps {sh 'ssh rhl02  "echo $wifipassword | sudo -S shutdown -t 300 "'}
 
                         }    
-            }
+                   }
+        stage('s3') {
+            steps {
+            
+            sh 'pwd'
+            
             }
         }
-        }
+    }
+        
+  
 }
