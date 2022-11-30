@@ -53,7 +53,8 @@ pipeline {
                         }
             
             }
-        }
+            }
+            }
         stage('s3') {
             steps {
             
