@@ -1,3 +1,5 @@
+import java.time.LocalDateTime
+
 pipeline {
     agent any
     options { timestamps()
@@ -35,10 +37,10 @@ pipeline {
             
             steps{
 
-                  {sh 'ssh rhl02  "echo $wifipassword | sudo -S shutdown -t 300 "'
-                            }
-
-                        }    
+                  sh 'ssh rhl02  "echo $wifipassword | sudo -S shutdown -t 300 "'
+                            
+}
+                            
                    }
         stage('s3') {
             steps {
