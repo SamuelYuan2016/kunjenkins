@@ -1,0 +1,64 @@
+import java.time.LocalDateTime
+
+pipeline {
+   agent any 
+   options { timestamps()
+                retry(1)
+        
+    }
+    stages{
+        stage("shutbyparallel"){
+
+                  parallel{
+                        stage('stop vlc') {
+                            options{timeout(time: 1, unit:"MINUTES")}
+                            
+                            steps { sh 'ssh $servername "killall -9 vlc"'}
+                        }
+                            
+                        stage('Play Music'){
+                            
+                            options{timeout(time: 20, unit:"MINUTES")}
+                                steps {
+                                    script {
+                                            if (LocalDateTime.now().hour < 20  & LocalDateTime.now().hour > 5) {
+                                                sleep(2)
+                                                    sh 'ssh $servername  "cvlc /home/pi/$playlists/*  "'
+                                                    
+                                                    
+                                                    
+            
+                                                    }
+                                            else {
+                                                echo 'Muisc Play in daytime'
+                                                    }                        
+                                }
+                        }
+                      }
+        
+                        }
+
+                        }
+                  }
+        
+        post {
+        always {
+            echo 'Always'
+        }
+        success {
+            echo 'Only on SUCCESS'
+        }
+        failure {
+            echo 'Only on Failure'
+        }
+        unstable {
+            echo 'Only if run is unstable'
+        }
+        changed {
+            echo 'Only if status changed from Success to Failure or vice versa w.r.t. last run.'
+        }
+    }
+                  
+    }                           
+
+
