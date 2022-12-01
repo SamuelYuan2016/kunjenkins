@@ -1,0 +1,67 @@
+import java.time.LocalDateTime
+
+pipeline {
+   agent any 
+   options { timestamps()
+                retry(1)
+        
+    }
+    stages{
+        stage("shutbyparallel"){
+
+                  parallel{
+                        stage('stop vlc') {
+                            options{timeout(time: 1, unit:"MINUTES")}
+                            
+                            steps { sh 'ssh rsp01 "killall -9 vlc"'}
+                        }
+                            
+                        stage('Play Music'){
+                            
+                            options{timeout(time: 12, unit:"MINUTES")}
+                                steps {
+                                    script {
+                                            if (LocalDateTime.now().hour < 20  & LocalDateTime.now().hour > 5) {
+                                                    sh 'ssh ubt05  "cvlc EmptyWorld.mp3  "'
+                                                    sh 'ssh ubt05  "cvlc EmptyWorld.mp3 "'
+                                                    
+                                                    
+            
+                                                    }
+                                            else {
+                                                echo 'Muisc Play in daytime'
+                                                    }                        
+                                }
+                        }
+                      }
+        
+                        }
+
+                        }
+                  }
+        
+        post {
+        always {
+            echo 'Always'
+        }
+        success {
+            echo 'Only on SUCCESS'
+        }
+        failure {
+            echo 'Only on Failure'
+        }
+        unstable {
+            echo 'Only if run is unstable'
+        }
+        changed {
+            echo 'Only if status changed from Success to Failure or vice versa w.r.t. last run.'
+        }
+    }
+                  
+    }                           
+
+
+
+
+
+            
