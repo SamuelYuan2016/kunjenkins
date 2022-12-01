@@ -13,7 +13,7 @@ pipeline {
                         stage('stop vlc') {
                             options{timeout(time: 1, unit:"MINUTES")}
                             
-                            steps { sh 'ssh rsp01 "killall -9 vlc"'}
+                            steps { sh 'ssh ubt05 "killall -9 vlc"'}
                         }
                             
                         stage('Play Music'){
