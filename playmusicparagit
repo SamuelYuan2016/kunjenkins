@@ -18,7 +18,7 @@ pipeline {
                             
                         stage('Play Music'){
                             
-                            options{timeout(time: 20, unit:"MINUTES")}
+                            options{timeout(time: 120, unit:"MINUTES")}
                                 steps {
                                     script {
                                             if (LocalDateTime.now().hour < 20  & LocalDateTime.now().hour > 5) {
